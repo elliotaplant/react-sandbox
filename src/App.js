@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Home from './components/Home';
+import Forms from './components/Forms';
 import styled from 'styled-components';
 import {Route, Link} from 'react-router-dom'
 
@@ -46,7 +47,7 @@ class App extends Component {
       </Header>
       <CenterContainer>
         <Route exact="exact" path="/" component={Home}/>
-        <Route path="/forms" component={<div>Forms</div>}/>
+        <Route path="/forms" component={Forms}/>
       </CenterContainer>
     </div>);
   }
