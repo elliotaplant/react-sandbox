@@ -1,22 +1,28 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 
-const File = styled.li`
+const File = styled.li `
   margin-bottom: 10px;
   box-shadow: 1;
+  list-style: none;
 `;
 
-const Files = styled.ul`
+const Files = styled.ul `
   margin: 0;
   padding: 0;
 `;
+
+const FileText = styled.p`
+  white-space: pre-wrap;
+`
 
 export default class FileInput extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      files: []
+      files: [],
+      firstFileText: ''
     };
 
     this.fileInput = React.createRef();
@@ -26,9 +32,7 @@ export default class FileInput extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    alert(
-      `Selected file - ${this.fileInput.files[0].name}`
-    );
+    alert(`Selected file - ${this.fileInput.files[0].name}`);
   }
 
   uploadedFiles() {
@@ -37,36 +41,38 @@ export default class FileInput extends Component {
         <div>{file.name}</div>
         <div>Last Modified: {new Date(file.lastModified).toString()}</div>
         <div>Type: {file.type}</div>
+        <div>All?: {window.URL.createObjectURL(file)}</div>
       </File>);
     }
   }
 
   updateFilesList() {
-    console.log('this.fileInput', this.fileInput);
-    console.log('this.fileInput.files', this.fileInput.current.files, JSON.stringify(this.fileInput.current.files[0]));
     if (this.fileInput.current && this.fileInput.current.files) {
       this.setState(({files}) => ({
-        files: [...files, ...this.fileInput.current.files]
-      }));
+        files: [
+          ...files,
+          ...this.fileInput.current.files
+        ]
+      }), () => {
+        if (this.state.files.length === 1) {
+          const reader = new FileReader();
+          reader.onload = ({target: { result }}) => this.setState({firstFileText: result});
+          reader.readAsText(this.state.files[0]);
+        }
+      });
     }
   }
 
   render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Upload file:
-          <input
-            type="file"
-            ref={this.fileInput}
-            onChange={this.updateFilesList}
-            multiple={true}
-          />
-        </label>
-        <br />
-        <button type="submit">Submit</button>
-        <Files>{this.uploadedFiles()}</Files>
-      </form>
-    );
+    return (<form onSubmit={this.handleSubmit}>
+      <label>
+        Upload file:
+        <input type="file" ref={this.fileInput} onChange={this.updateFilesList} multiple={true}/>
+      </label>
+      <br/>
+      <button type="submit">Submit</button>
+      <Files>{this.uploadedFiles()}</Files>
+      <FileText>{this.state.firstFileText}</FileText>
+    </form>);
   }
 }
