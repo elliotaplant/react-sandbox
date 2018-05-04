@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Home from './components/Home';
-import Forms from './components/Forms';
+import FileInput from './components/FileInput';
 import styled from 'styled-components';
 import {Route, Link} from 'react-router-dom'
 
@@ -17,7 +17,7 @@ const HeaderLine = styled.h3 `
   color: #eee;
 `;
 
-const LinksList = styled.ul `
+const LinksList = styled.div `
   padding: 0;
   margin: 0;
   display: flex;
@@ -42,12 +42,12 @@ class App extends Component {
         <HeaderLine>React Sandbox</HeaderLine>
         <LinksList>
           <RouteLink to="/">Home</RouteLink>
-          <RouteLink to="/forms">Forms</RouteLink>
+          <RouteLink to="/fileInput">FileInput</RouteLink>
         </LinksList>
       </Header>
       <CenterContainer>
-        <Route exact="exact" path="/" component={Home}/>
-        <Route path="/forms" component={Forms}/>
+        <Route exact={true} path="/" component={Home}/>
+        <Route path="/fileInput" component={FileInput}/>
       </CenterContainer>
     </div>);
   }
